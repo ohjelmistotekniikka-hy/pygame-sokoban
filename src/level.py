@@ -84,7 +84,6 @@ class Level:
         for y in range(height):
             for x in range(width):
                 square = level_map[y][x]
-                game_object = GameObject(x, y, 1, 1)
 
                 if square == 0:
                     self.floors.append(Floor(GameObject(x, y, 1, 1)))
