@@ -1,6 +1,6 @@
 # Pygame Sokoban
 
-Pygame-toteutus [Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-pelistä.
+[Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-pelin toteutus [Pygame](https://www.pygame.org)-kirjastolla. 
 
 # Käyttöohjeet
 
@@ -10,4 +10,4 @@ Pygame-toteutus [Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-pelistä.
 
 # Testien suorittaminen
 
-Pelin testit pystyy suorittamaan komennolla `poetry run pytest src`
+Projektin testit pystyy suorittamaan komennolla `poetry run pytest src`.
