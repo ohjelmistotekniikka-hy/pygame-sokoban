@@ -37,4 +37,4 @@ class GameLoop:
                 return False
 
     def _render(self):
-        self._renderer.render_display()
+        self._renderer.render()

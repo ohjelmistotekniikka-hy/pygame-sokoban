@@ -1,5 +1,4 @@
 import pygame
-
 from level import Level
 from game_loop import GameLoop
 from event_loop import EventLoop
@@ -22,7 +21,7 @@ GRID_SIZE = 50
 
 
 def main():
-    level_map = LEVEL_MAP_2
+    level_map = LEVEL_MAP_1
     height = len(level_map)
     width = len(level_map[0])
     display_height = height * GRID_SIZE
@@ -35,7 +34,7 @@ def main():
     event_loop = EventLoop()
     renderer = Renderer(display, level)
     clock = Clock()
-    game_loop = GameLoop(level, renderer, event_loop, clock)
+    game_loop = GameLoop(level, renderer, event_loop, clock, GRID_SIZE)
 
     pygame.init()
     game_loop.start()

@@ -25,7 +25,7 @@ class StubEventLoop:
 
 
 class StubRenderer:
-    def render_display(self):
+    def render(self):
         pass
 
 

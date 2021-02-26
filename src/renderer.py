@@ -6,8 +6,7 @@ class Renderer:
         self._display = display
         self._level = level
 
-    def render_display(self):
+    def render(self):
         self._level.all_sprites.draw(self._display)
 
-        pygame.display.flip()
         pygame.display.update()
