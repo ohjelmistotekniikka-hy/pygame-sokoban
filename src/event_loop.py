@@ -1,5 +1,5 @@
 import pygame
 
-class PygameEventLoop:
-    def get_event(self):
+class EventLoop:
+    def get(self):
         return pygame.event.get()

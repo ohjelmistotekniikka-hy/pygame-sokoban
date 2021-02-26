@@ -1,4 +1,4 @@
-from game_object import GameObject
+import pygame
 from robot import Robot
 from box import Box
 from floor import Floor
@@ -7,93 +7,120 @@ from wall import Wall
 
 
 class Level:
-    def __init__(self, level_map):
+    def __init__(self, level_map, grid_size):
+        self.grid_size = grid_size
         self.robot = None
-        self.walls = []
-        self.targets = []
-        self.floors = []
-        self.boxes = []
+        self.walls = pygame.sprite.Group()
+        self.targets = pygame.sprite.Group()
+        self.floors = pygame.sprite.Group()
+        self.boxes = pygame.sprite.Group()
+        self.all_sprites = pygame.sprite.Group()
 
-        self._initialize_game_objects(level_map)
+        self._initialize_sprites(level_map)
+
+    def update(self):
+        for box in self.boxes:
+            box.is_in_target = self._box_is_in_target(box)
+
+        self.robot.is_in_target = self._robot_is_in_target()
+
+        self.all_sprites.update()
 
     def move_robot(self, dx=0, dy=0):
         if not self._robot_can_move(dx, dy):
             return
 
-        self.robot.game_object.move(dx, dy)
+        self._move_sprite(self.robot, dx, dy)
 
-        intersecting_box = self._get_intersecting_box(self.robot.game_object)
+        colliding_boxes = self._get_colliding_boxes(self.robot)
 
-        if intersecting_box is not None:
-            intersecting_box.game_object.move(dx, dy)
+        if colliding_boxes:
+            self._move_sprite(colliding_boxes[0], dx, dy)
 
     def is_completed(self):
-        for target in self.targets:
-            intersecting_box = self._get_intersecting_box(target.game_object)
-
-            if intersecting_box is None:
+        for box in self.boxes:
+            if not self._box_is_in_target(box):
                 return False
 
         return True
 
-    def _get_intersecting_wall(self, game_object):
-        intersecting_walls = [
-            wall for wall in self.walls if wall.game_object.intersects(game_object) and wall.game_object != game_object
-        ]
+    def _box_is_in_target(self, box):
+        return len(self._get_colliding_targets(box)) > 0
 
-        return intersecting_walls[0] if len(intersecting_walls) > 0 else None
+    def _robot_is_in_target(self):
+        return len(self._get_colliding_targets(self.robot)) > 0
 
-    def _get_intersecting_box(self, game_object):
-        intersecting_boxes = [
-            box for box in self.boxes if box.game_object.intersects(game_object) and box.game_object != game_object
-        ]
+    def _move_sprite(self, sprite, dx=0, dy=0):
+        sprite.rect.x += dx
+        sprite.rect.y += dy
 
-        return intersecting_boxes[0] if len(intersecting_boxes) > 0 else None
+    def _get_colliding_walls(self, sprite):
+        return pygame.sprite.spritecollide(sprite, self.walls, False)
 
-    def _box_can_move(self, box, dx=0, dy=0):
-        box.game_object.move(dx, dy)
+    def _get_colliding_boxes(self, sprite):
+        return pygame.sprite.spritecollide(sprite, self.boxes, False)
 
-        intersecting_wall = self._get_intersecting_wall(box.game_object)
-
-        intersecting_box = self._get_intersecting_box(box.game_object)
-
-        can_move = intersecting_wall is None and intersecting_box is None
-
-        box.game_object.move(-dx, -dy)
-
-        return can_move
+    def _get_colliding_targets(self, sprite):
+        return pygame.sprite.spritecollide(sprite, self.targets, False)
 
     def _robot_can_move(self, dx=0, dy=0):
-        self.robot.game_object.move(dx, dy)
+        self._move_sprite(self.robot, dx, dy)
 
-        intersecting_wall = self._get_intersecting_wall(self.robot.game_object)
+        colliding_walls = self._get_colliding_walls(self.robot)
+        colliding_boxes = self._get_colliding_boxes(self.robot)
+        first_colliding_box = colliding_boxes[0] if colliding_boxes else None
 
-        intersecting_box = self._get_intersecting_box(self.robot.game_object)
+        can_move = not colliding_walls and (
+            first_colliding_box is None or self._box_can_move(
+                first_colliding_box, dx, dy
+            )
+        )
 
-        can_move = intersecting_wall is None and (
-            intersecting_box is None or self._box_can_move(intersecting_box, dx, dy))
-
-        self.robot.game_object.move(-dx, -dy)
+        self._move_sprite(self.robot, -dx, -dy)
 
         return can_move
 
-    def _initialize_game_objects(self, level_map):
+    def _box_can_move(self, box, dx=0, dy=0):
+        self._move_sprite(box, dx, dy)
+
+        colliding_walls = self._get_colliding_walls(box)
+        colliding_boxes = self._get_colliding_boxes(box)
+
+        colliding_boxes.remove(box)
+
+        can_move = not colliding_walls and not colliding_boxes
+
+        self._move_sprite(box, -dx, -dy)
+
+        return can_move
+
+    def _initialize_sprites(self, level_map):
         height = len(level_map)
         width = len(level_map[0])
 
         for y in range(height):
             for x in range(width):
                 square = level_map[y][x]
+                normalized_x = x * self.grid_size
+                normalized_y = y * self.grid_size
 
                 if square == 0:
-                    self.floors.append(Floor(GameObject(x, y, 1, 1)))
+                    self.floors.add(Floor(normalized_x, normalized_y))
                 elif square == 1:
-                    self.walls.append(Wall(GameObject(x, y, 1, 1)))
+                    self.walls.add(Wall(normalized_x, normalized_y))
                 elif square == 2:
-                    self.targets.append(Target(GameObject(x, y, 1, 1)))
+                    self.targets.add(Target(normalized_x, normalized_y))
                 elif square == 3:
-                    self.boxes.append(Box(GameObject(x, y, 1, 1)))
-                    self.floors.append(Floor(GameObject(x, y, 1, 1)))
+                    self.boxes.add(Box(normalized_x, normalized_y))
+                    self.floors.add(Floor(normalized_x, normalized_y))
                 elif square == 4:
-                    self.robot = Robot(GameObject(x, y, 1, 1))
-                    self.floors.append(Floor(GameObject(x, y, 1, 1)))
+                    self.robot = Robot(normalized_x, normalized_y)
+                    self.floors.add(Floor(normalized_x, normalized_y))
+
+        self.all_sprites.add(
+            self.floors,
+            self.walls,
+            self.targets,
+            self.boxes,
+            self.robot
+        )

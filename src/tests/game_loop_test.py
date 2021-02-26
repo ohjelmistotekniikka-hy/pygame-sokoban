@@ -2,7 +2,12 @@ import unittest
 import pygame
 
 from level import Level
-from game_logic import GameLogic
+from game_loop import GameLoop
+
+
+class StubClock:
+    def tick(self, fps):
+        pass
 
 
 class StubEvent:
@@ -15,7 +20,7 @@ class StubEventLoop:
     def __init__(self, events):
         self._events = events
 
-    def get_event(self):
+    def get(self):
         return self._events
 
 
@@ -29,26 +34,26 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 2, 3, 4, 1],
                [1, 1, 1, 1, 1]]
 
+GRID_SIZE = 50
 
-class TestGameLogic(unittest.TestCase):
+
+class TestGameLoop(unittest.TestCase):
     def setUp(self):
-        self.level_1 = Level(LEVEL_MAP_1)
-
-    def assert_coordinates_equal(self, game_object, x, y):
-        self.assertEqual(game_object.x, x)
-        self.assertEqual(game_object.y, y)
+        self.level_1 = Level(LEVEL_MAP_1, GRID_SIZE)
 
     def test_can_complete_level(self):
         events = [
             StubEvent(pygame.KEYDOWN, pygame.K_LEFT),
         ]
 
-        game_logic = GameLogic(
+        game_loop = GameLoop(
             self.level_1,
             StubRenderer(),
-            StubEventLoop(events)
+            StubEventLoop(events),
+            StubClock(),
+            GRID_SIZE
         )
 
-        game_logic.start_game_loop()
+        game_loop.start()
 
         self.assertTrue(self.level_1.is_completed())
