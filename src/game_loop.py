@@ -14,7 +14,9 @@ class GameLoop:
             if self._handle_events() == False:
                 break
 
-            self._level.update()
+            current_time = self._clock.get_ticks()
+
+            self._level.update(current_time)
             self._render()
 
             if self._level.is_completed():

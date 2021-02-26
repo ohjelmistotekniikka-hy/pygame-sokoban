@@ -6,3 +6,6 @@ class Clock:
 
     def tick(self, fps):
         self._clock.tick(fps)
+
+    def get_ticks(self):
+        return pygame.time.get_ticks()

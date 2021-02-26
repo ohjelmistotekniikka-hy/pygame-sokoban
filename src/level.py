@@ -18,13 +18,14 @@ class Level:
 
         self._initialize_sprites(level_map)
 
-    def update(self):
+    def update(self, current_time):
         for box in self.boxes:
             box.is_in_target = self._box_is_in_target(box)
 
         self.robot.is_in_target = self._robot_is_in_target()
 
-        self.all_sprites.update()
+        self.boxes.update()
+        self.robot.update()
 
     def move_robot(self, dx=0, dy=0):
         if not self._robot_can_move(dx, dy):
@@ -71,7 +72,7 @@ class Level:
         first_colliding_box = colliding_boxes[0] if colliding_boxes else None
 
         can_move = not colliding_walls and (
-            first_colliding_box is None or self._box_can_move(
+            first_colliding_box is None or self._can_move(
                 first_colliding_box, dx, dy
             )
         )
@@ -80,17 +81,18 @@ class Level:
 
         return can_move
 
-    def _box_can_move(self, box, dx=0, dy=0):
-        self._move_sprite(box, dx, dy)
+    def _can_move(self, sprite, dx=0, dy=0):
+        self._move_sprite(sprite, dx, dy)
 
-        colliding_walls = self._get_colliding_walls(box)
-        colliding_boxes = self._get_colliding_boxes(box)
+        colliding_walls = self._get_colliding_walls(sprite)
+        colliding_boxes = self._get_colliding_boxes(sprite)
 
-        colliding_boxes.remove(box)
+        if isinstance(sprite, Box):
+            colliding_boxes.remove(sprite)
 
         can_move = not colliding_walls and not colliding_boxes
 
-        self._move_sprite(box, -dx, -dy)
+        self._move_sprite(sprite, -dx, -dy)
 
         return can_move
 

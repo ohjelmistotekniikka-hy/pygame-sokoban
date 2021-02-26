@@ -9,6 +9,9 @@ class StubClock:
     def tick(self, fps):
         pass
 
+    def get_ticks(self):
+        0
+
 
 class StubEvent:
     def __init__(self, event_type, key):

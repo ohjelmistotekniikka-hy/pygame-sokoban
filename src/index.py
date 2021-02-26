@@ -11,7 +11,7 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 1, 1, 1, 1]]
 
 LEVEL_MAP_2 = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-               [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+               [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 5, 1],
                [1, 2, 3, 0, 0, 0, 1, 0, 0, 1, 2, 3, 0, 0, 0, 0, 1],
                [1, 0, 0, 1, 2, 3, 0, 2, 3, 0, 0, 0, 1, 0, 0, 0, 1],
                [1, 0, 4, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
@@ -21,7 +21,7 @@ GRID_SIZE = 50
 
 
 def main():
-    level_map = LEVEL_MAP_1
+    level_map = LEVEL_MAP_2
     height = len(level_map)
     width = len(level_map[0])
     display_height = height * GRID_SIZE
@@ -31,6 +31,7 @@ def main():
     pygame.display.set_caption("Sokoban")
 
     level = Level(level_map, GRID_SIZE)
+
     event_loop = EventLoop()
     renderer = Renderer(display, level)
     clock = Clock()
