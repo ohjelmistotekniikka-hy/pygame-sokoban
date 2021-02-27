@@ -2,12 +2,12 @@ import pygame
 
 
 class GameLoop:
-    def __init__(self, level, renderer, event_loop, clock, grid_size):
+    def __init__(self, level, renderer, event_loop, clock, cell_size):
         self._level = level
         self._renderer = renderer
         self._event_loop = event_loop
         self._clock = clock
-        self._grid_size = grid_size
+        self._cell_size = cell_size
 
     def start(self):
         while True:
@@ -28,13 +28,13 @@ class GameLoop:
         for event in self._event_loop.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    self._level.move_robot(dx=-self._grid_size)
+                    self._level.move_robot(dx=-self._cell_size)
                 if event.key == pygame.K_RIGHT:
-                    self._level.move_robot(dx=self._grid_size)
+                    self._level.move_robot(dx=self._cell_size)
                 if event.key == pygame.K_UP:
-                    self._level.move_robot(dy=-self._grid_size)
+                    self._level.move_robot(dy=-self._cell_size)
                 if event.key == pygame.K_DOWN:
-                    self._level.move_robot(dy=self._grid_size)
+                    self._level.move_robot(dy=self._cell_size)
             elif event.type == pygame.QUIT:
                 return False
 

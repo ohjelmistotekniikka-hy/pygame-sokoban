@@ -7,8 +7,8 @@ from wall import Wall
 
 
 class Level:
-    def __init__(self, level_map, grid_size):
-        self.grid_size = grid_size
+    def __init__(self, level_map, cell_size):
+        self.cell_size = cell_size
         self.robot = None
         self.walls = pygame.sprite.Group()
         self.targets = pygame.sprite.Group()
@@ -102,20 +102,20 @@ class Level:
 
         for y in range(height):
             for x in range(width):
-                square = level_map[y][x]
-                normalized_x = x * self.grid_size
-                normalized_y = y * self.grid_size
+                cell = level_map[y][x]
+                normalized_x = x * self.cell_size
+                normalized_y = y * self.cell_size
 
-                if square == 0:
+                if cell == 0:
                     self.floors.add(Floor(normalized_x, normalized_y))
-                elif square == 1:
+                elif cell == 1:
                     self.walls.add(Wall(normalized_x, normalized_y))
-                elif square == 2:
+                elif cell == 2:
                     self.targets.add(Target(normalized_x, normalized_y))
-                elif square == 3:
+                elif cell == 3:
                     self.boxes.add(Box(normalized_x, normalized_y))
                     self.floors.add(Floor(normalized_x, normalized_y))
-                elif square == 4:
+                elif cell == 4:
                     self.robot = Robot(normalized_x, normalized_y)
                     self.floors.add(Floor(normalized_x, normalized_y))
 

@@ -37,12 +37,12 @@ LEVEL_MAP_1 = [[1, 1, 1, 1, 1],
                [1, 2, 3, 4, 1],
                [1, 1, 1, 1, 1]]
 
-GRID_SIZE = 50
+CELL_SIZE = 50
 
 
 class TestGameLoop(unittest.TestCase):
     def setUp(self):
-        self.level_1 = Level(LEVEL_MAP_1, GRID_SIZE)
+        self.level_1 = Level(LEVEL_MAP_1, CELL_SIZE)
 
     def test_can_complete_level(self):
         events = [
@@ -54,7 +54,7 @@ class TestGameLoop(unittest.TestCase):
             StubRenderer(),
             StubEventLoop(events),
             StubClock(),
-            GRID_SIZE
+            CELL_SIZE
         )
 
         game_loop.start()
