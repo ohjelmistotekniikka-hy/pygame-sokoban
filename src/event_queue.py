@@ -1,5 +1,5 @@
 import pygame
 
-class EventLoop:
+class EventQueue:
     def get(self):
         return pygame.event.get()

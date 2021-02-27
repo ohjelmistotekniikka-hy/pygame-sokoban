@@ -2,10 +2,10 @@ import pygame
 
 
 class GameLoop:
-    def __init__(self, level, renderer, event_loop, clock, cell_size):
+    def __init__(self, level, renderer, event_queue, clock, cell_size):
         self._level = level
         self._renderer = renderer
-        self._event_loop = event_loop
+        self._event_queue = event_queue
         self._clock = clock
         self._cell_size = cell_size
 
@@ -25,7 +25,7 @@ class GameLoop:
             self._clock.tick(60)
 
     def _handle_events(self):
-        for event in self._event_loop.get():
+        for event in self._event_queue.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self._level.move_robot(dx=-self._cell_size)

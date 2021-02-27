@@ -19,7 +19,7 @@ class StubEvent:
         self.key = key
 
 
-class StubEventLoop:
+class StubEventQueue:
     def __init__(self, events):
         self._events = events
 
@@ -52,7 +52,7 @@ class TestGameLoop(unittest.TestCase):
         game_loop = GameLoop(
             self.level_1,
             StubRenderer(),
-            StubEventLoop(events),
+            StubEventQueue(events),
             StubClock(),
             CELL_SIZE
         )

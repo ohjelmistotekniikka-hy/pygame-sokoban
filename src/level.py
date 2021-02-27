@@ -31,12 +31,12 @@ class Level:
         if not self._robot_can_move(dx, dy):
             return
 
-        self._move_sprite(self.robot, dx, dy)
+        self.robot.rect.move_ip(dx, dy)
 
         colliding_boxes = self._get_colliding_boxes(self.robot)
 
         if colliding_boxes:
-            self._move_sprite(colliding_boxes[0], dx, dy)
+            colliding_boxes[0].rect.move_ip(dx, dy)
 
     def is_completed(self):
         for box in self.boxes:
@@ -51,10 +51,6 @@ class Level:
     def _robot_is_in_target(self):
         return len(self._get_colliding_targets(self.robot)) > 0
 
-    def _move_sprite(self, sprite, dx=0, dy=0):
-        sprite.rect.x += dx
-        sprite.rect.y += dy
-
     def _get_colliding_walls(self, sprite):
         return pygame.sprite.spritecollide(sprite, self.walls, False)
 
@@ -65,7 +61,7 @@ class Level:
         return pygame.sprite.spritecollide(sprite, self.targets, False)
 
     def _robot_can_move(self, dx=0, dy=0):
-        self._move_sprite(self.robot, dx, dy)
+        self.robot.rect.move_ip(dx, dy)
 
         colliding_walls = self._get_colliding_walls(self.robot)
         colliding_boxes = self._get_colliding_boxes(self.robot)
@@ -77,12 +73,12 @@ class Level:
             )
         )
 
-        self._move_sprite(self.robot, -dx, -dy)
+        self.robot.rect.move_ip(-dx, -dy)
 
         return can_move
 
     def _can_move(self, sprite, dx=0, dy=0):
-        self._move_sprite(sprite, dx, dy)
+        sprite.rect.move_ip(dx, dy)
 
         colliding_walls = self._get_colliding_walls(sprite)
         colliding_boxes = self._get_colliding_boxes(sprite)
@@ -92,7 +88,7 @@ class Level:
 
         can_move = not colliding_walls and not colliding_boxes
 
-        self._move_sprite(sprite, -dx, -dy)
+        sprite.rect.move_ip(-dx, -dy)
 
         return can_move
 

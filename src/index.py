@@ -1,7 +1,7 @@
 import pygame
 from level import Level
 from game_loop import GameLoop
-from event_loop import EventLoop
+from event_queue import EventQueue
 from renderer import Renderer
 from clock import Clock
 
@@ -32,10 +32,10 @@ def main():
 
     level = Level(level_map, CELL_SIZE)
 
-    event_loop = EventLoop()
+    event_queue = EventQueue()
     renderer = Renderer(display, level)
     clock = Clock()
-    game_loop = GameLoop(level, renderer, event_loop, clock, CELL_SIZE)
+    game_loop = GameLoop(level, renderer, event_queue, clock, CELL_SIZE)
 
     pygame.init()
     game_loop.start()
