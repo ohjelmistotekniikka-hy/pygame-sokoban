@@ -16,17 +16,10 @@ class Box(pygame.sprite.Sprite):
         self.rect.y = y
 
     def update(self):
-        current_x = self.rect.x
-        current_y = self.rect.y
-
         if self.is_in_target:
             self.image = self._images["box_in_target"]
         else:
             self.image = self._images["box"]
-
-        self.rect = self.image.get_rect()
-        self.rect.x = current_x
-        self.rect.y = current_y
 
     def _load_images(self):
         return {
