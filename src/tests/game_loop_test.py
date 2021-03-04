@@ -10,7 +10,7 @@ class StubClock:
         pass
 
     def get_ticks(self):
-        0
+        return 0
 
 
 class StubEvent:
