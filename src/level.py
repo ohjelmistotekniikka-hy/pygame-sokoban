@@ -1,9 +1,9 @@
 import pygame
-from robot import Robot
-from box import Box
-from floor import Floor
-from target import Target
-from wall import Wall
+from sprites.robot import Robot
+from sprites.box import Box
+from sprites.floor import Floor
+from sprites.target import Target
+from sprites.wall import Wall
 
 
 class Level:

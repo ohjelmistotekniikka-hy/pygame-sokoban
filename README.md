@@ -1,6 +1,6 @@
 # Pygame Sokoban
 
-[Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-pelin toteutus [Pygame](https://www.pygame.org)-kirjastolla. 
+[Sokoban](https://fi.wikipedia.org/wiki/Sokoban)-pelin toteutus [Pygame](https://www.pygame.org)-kirjastolla.
 
 # Käyttöohjeet
 
